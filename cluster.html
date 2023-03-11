@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running on HPC Clusters &mdash; STREAMLINE 2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Explaining STREAMLINE Output" href="analysis.html" />
+    <link rel="prev" title="Running on Local System" href="local.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            STREAMLINE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">STREAMLINE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About (FAQs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sample.html">Sample Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colab.html">Running on Google Colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local.html">Running on Local System</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Running on HPC Clusters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#helpful-tools">Helpful Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nano">nano</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tmux">tmux</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running-using-command-line-interface">Running using command line interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-config-file">Using config file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-command-line-parameters">Using command-line parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Explaining STREAMLINE Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phases.html">STREAMLINE Phases Described</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">STREAMLINE Run Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Guidelines for Setting Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Adding New Modeling Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">STREAMLINE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Running on HPC Clusters</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cluster.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="running-on-hpc-clusters">
+<h1>Running on HPC Clusters<a class="headerlink" href="#running-on-hpc-clusters" title="Permalink to this heading"></a></h1>
+<p>The easiest way to run STREAMLINE on HPC is through the CLI interface.
+The runtime parameters can easily be set up using either the config file
+of command line parameters. A few tools may be helpful in doings so and are described in
+the <a class="reference internal" href="#helpful-tools">helpful tools</a> section.</p>
+<p>You only need to additionally define 4 additional parameters to run the models
+using a cluster setup.</p>
+<p>Rest is handled similarly by <code class="docutils literal notranslate"><span class="pre">run.py</span></code> as defined in <a class="reference internal" href="local.html#running-on-cli"><span class="std std-ref">local section</span></a></p>
+<section id="helpful-tools">
+<h2>Helpful Tools<a class="headerlink" href="#helpful-tools" title="Permalink to this heading"></a></h2>
+<section id="nano">
+<h3>nano<a class="headerlink" href="#nano" title="Permalink to this heading"></a></h3>
+<p>GNU nano is a text editor for Unix-like computing
+systems or operating environments using a command line interface.</p>
+<p>This would be incredibly handy in changing opening and changing the config file through ssh terminal
+for using STREAMLINE through config file.</p>
+<p>A detailed guide can be found <a class="reference external" href="https://www.hostinger.com/tutorials/how-to-install-and-use-nano-text-editor">here</a></p>
+<p>A gist of the application is that you can edit the <code class="docutils literal notranslate"><span class="pre">upenn.cfg</span></code> config file by the following steps</p>
+<ol class="arabic simple">
+<li><p>Go to the root streamline folder.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">nano</span> <span class="pre">upenn.cfg</span></code> in the terminal to open the file in tmux.</p></li>
+<li><p>Make the necessary in the changes in the config file.</p></li>
+<li><p>Press <code class="docutils literal notranslate"><span class="pre">Ctrl</span> <span class="pre">+</span> <span class="pre">X</span></code> to close the file and <code class="docutils literal notranslate"><span class="pre">Y</span></code> to save the changes.</p></li>
+</ol>
+</section>
+<section id="tmux">
+<h3>tmux<a class="headerlink" href="#tmux" title="Permalink to this heading"></a></h3>
+<p>tmux is a terminal multiplexer/emulator. It lets you switch easily between several programs in one terminal,
+detach them (they keep running in the background) and reattach them to a different terminal.</p>
+<p>Terminal emulators programs allow you to create several “pseudo terminals” from a single terminal.
+They decouple your programs from the main terminal,
+protecting them from accidentally disconnecting.
+You can detach tmux or screen from the login terminal,
+and all your programs will continue to run safely in the background.
+Later, we can reattach them to the same or a different terminal to
+monitor the process. These are also very useful for running multiple programs with a single connection,
+such as when you’re remotely connecting to a machine using Secure Shell (SSH).</p>
+<p>A detailed guide on using it can be found <a class="reference external" href="https://www.redhat.com/sysadmin/introduction-tmux-linux">here</a></p>
+<p>A gist of the application is that you can open a new terminal
+that will stay open even if you disconnect and close your terminal.</p>
+<p>The steps to take it is as follows:</p>
+<ol class="arabic simple">
+<li><p>Go to the root streamline folder.</p></li>
+<li><p>Type and run <code class="docutils literal notranslate"><span class="pre">tmux</span> <span class="pre">new</span> <span class="pre">-s</span> <span class="pre">mysession</span></code></p></li>
+<li><p>Open the required config file using nano (e.g. <code class="docutils literal notranslate"><span class="pre">upenn.cfg</span></code>)</p></li>
+<li><p>Make the necessary in the changes in the config file.</p></li>
+<li><p>Press <code class="docutils literal notranslate"><span class="pre">Ctrl</span> <span class="pre">+</span> <span class="pre">X</span></code> to close the file and <code class="docutils literal notranslate"><span class="pre">Y</span></code> to save the changes.</p></li>
+<li><p>Run required commands.</p></li>
+<li><p>Press <code class="docutils literal notranslate"><span class="pre">Ctrl</span> <span class="pre">+</span> <span class="pre">b</span></code> and then the <code class="docutils literal notranslate"><span class="pre">d</span></code> key to close the terminal.</p></li>
+</ol>
+</section>
+</section>
+<section id="running-using-command-line-interface">
+<h2>Running using command line interface<a class="headerlink" href="#running-using-command-line-interface" title="Permalink to this heading"></a></h2>
+<section id="using-config-file">
+<h3>Using config file<a class="headerlink" href="#using-config-file" title="Permalink to this heading"></a></h3>
+<p>Edit the multiprocessing section of the config file according to your needs.</p>
+<p>The multiprocessing section has four parameters that need to be defined.</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">run-parallel</span></code>: Flag to run parallel processing in local job, overridden if <code class="docutils literal notranslate"><span class="pre">run-cluster</span></code> is defined.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">res-mem</span></code>: memory reserved per job</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run-cluster</span></code>: flag for type of cluster, by far the most important parameter discussed in detail below.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">queue</span></code>: the partition queue used for job submissions.</p></li>
+</ol>
+<p>The <code class="docutils literal notranslate"><span class="pre">run_cluster</span></code> parameter is the most important parameter here.
+It is set to False when running locally, to use a cluster implementation, specify as a
+string type of cluster. Currently, clusters supported by <code class="docutils literal notranslate"><span class="pre">dask-jobqueue</span></code> can be supported.</p>
+<p>Additionally, the old method of manual submission can be done using the flags
+<code class="docutils literal notranslate"><span class="pre">&quot;SLURMOld&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;LSFOld&quot;</span></code> instead. This will generate and submit jobs using shell files
+similar to the legacy version of STREAMLINE.</p>
+<p>As example config setup to run all steps till report generations using LSF dask-jobqueue on UPenn I2C2 Cluster Setup.
+is given in the config
+file <a class="reference external" href="https://github.com/UrbsLab/STREAMLINE/blob/dev/upenn.cfg">here</a></p>
+<p>We specifically focus on the multiprocessing section of the
+config file
+<a class="reference external" href="https://github.com/UrbsLab/STREAMLINE/blob/39b8acdf52607582599eb32a83b2fcd877b22466/upenn.cfg#L9-L12">here</a>.</p>
+<p>Now you can run the pipeline using the following command (considering the config file is <code class="docutils literal notranslate"><span class="pre">upenn.cfg</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">c</span> <span class="n">upenn</span><span class="o">.</span><span class="n">cfg</span>
+</pre></div>
+</div>
+</section>
+<section id="using-command-line-parameters">
+<h3>Using command-line parameters<a class="headerlink" href="#using-command-line-parameters" title="Permalink to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">run.py</span></code> can also be used with command line parameters
+as defined in the <a class="reference internal" href="parameters.html"><span class="std std-doc">parameters section</span></a></p>
+<p>As discussed above you need only specify 3 additional parameters in the
+CLI parameters way of running STREAMLINE</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">other</span> <span class="n">commands</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+<p>We give examples to run all phases separately and together
+on the example DemoData on the Cedars LSF HPC.</p>
+<p>As example case to all phases till report generation is given below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">path</span> <span class="n">DemoData</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">till</span><span class="o">-</span><span class="n">report</span> <span class="o">--</span><span class="n">class</span><span class="o">-</span><span class="n">label</span> <span class="n">Class</span> <span class="o">--</span><span class="n">inst</span><span class="o">-</span><span class="n">label</span> <span class="n">InstanceID</span> <span class="o">--</span><span class="n">algorithms</span><span class="o">=</span><span class="n">NB</span><span class="p">,</span><span class="n">LR</span><span class="p">,</span><span class="n">DT</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+<p>A user can also run phases of STREAMLINE individually,
+however the user must have run all the phases before the phase he wants to run, i.e. the user must run this
+pipeline sequentially in the given order.</p>
+<p>To just run Exploratory Phase (Phase 1):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">path</span> <span class="n">DemoData</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">eda</span> <span class="o">--</span><span class="n">class</span><span class="o">-</span><span class="n">label</span> <span class="n">Class</span> <span class="o">--</span><span class="n">inst</span><span class="o">-</span><span class="n">label</span> <span class="n">InstanceID</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+<p>To just run Data Preparation Phase (Phase 2):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">dataprep</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+<p>To just run Feature Importance Phase (Phase 3):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">feat</span><span class="o">-</span><span class="n">imp</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+<p>To just run Feature Selection Phase (Phase 4):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">feat</span><span class="o">-</span><span class="n">sel</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+<p>To just run Modeling Phase (Phase 5):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">model</span> <span class="o">--</span><span class="n">algorithms</span> <span class="n">NB</span><span class="p">,</span><span class="n">LR</span><span class="p">,</span><span class="n">DT</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+<p>To just run Statistical Analysis Phase (Phase 6):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">stats</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+<p>To just run Dataset Compare Phase (Phase 7):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">compare</span><span class="o">-</span><span class="n">dataset</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+<p>To just run (Reporting Phase) Phase 8:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">report</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+<p>To just run Replication Phase (Phase 9):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">rep</span><span class="o">-</span><span class="n">path</span> <span class="n">DemoRepData</span> <span class="o">--</span><span class="n">dataset</span> <span class="n">DemoData</span><span class="o">/</span><span class="n">demodata</span><span class="o">.</span><span class="n">csv</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">replicate</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+<p>To just run Replication Report Phase (Phase 10):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">rep</span><span class="o">-</span><span class="n">path</span> <span class="n">DemoRepData</span> <span class="o">--</span><span class="n">dataset</span> <span class="n">DemoData</span><span class="o">/</span><span class="n">demodata</span><span class="o">.</span><span class="n">csv</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">rep</span><span class="o">-</span><span class="n">report</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+<p>To just run Cleaning Phase (Phase 11):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">clean</span> <span class="o">--</span><span class="k">del</span><span class="o">-</span><span class="n">time</span> <span class="o">--</span><span class="k">del</span><span class="o">-</span><span class="n">old</span><span class="o">-</span><span class="n">cv</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="n">LSF</span> <span class="o">--</span><span class="n">res</span><span class="o">-</span><span class="n">mem</span> <span class="mi">4</span> <span class="o">--</span><span class="n">queue</span> <span class="n">i2c2_normal</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="local.html" class="btn btn-neutral float-left" title="Running on Local System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="analysis.html" class="btn btn-neutral float-right" title="Explaining STREAMLINE Output" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Ryan Urbanowicz, Harsh Bandhey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

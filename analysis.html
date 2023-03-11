@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explaining STREAMLINE Output &mdash; STREAMLINE 2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="STREAMLINE Phases Described" href="phases.html" />
+    <link rel="prev" title="Running on HPC Clusters" href="cluster.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            STREAMLINE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">STREAMLINE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About (FAQs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sample.html">Sample Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colab.html">Running on Google Colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local.html">Running on Local System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cluster.html">Running on HPC Clusters</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Explaining STREAMLINE Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phases.html">STREAMLINE Phases Described</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">STREAMLINE Run Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Guidelines for Setting Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Adding New Modeling Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">STREAMLINE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Explaining STREAMLINE Output</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/analysis.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="explaining-streamline-output">
+<h1>Explaining STREAMLINE Output<a class="headerlink" href="#explaining-streamline-output" title="Permalink to this heading"></a></h1>
+<p>This section describes the files in the experiment directory with reference to a
+sample run on the <a class="reference internal" href="sample.html#demonstration-data"><span class="std std-ref">demonstration dataset</span></a></p>
+<p>If this is a demo run the saved experiment folder that was output by the run, called <code class="docutils literal notranslate"><span class="pre">demo</span></code>.
+If you changed the <code class="docutils literal notranslate"><span class="pre">experiment_name</span></code> parameter or if this is a custom run it may be different and be named the same as
+<code class="docutils literal notranslate"><span class="pre">experiment_name</span></code> your parameter.</p>
+<p>Within this folder you should find the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;experiment_name&gt;_ML_Pipeline_Report.pdf</span></code> [File]: This is an automatically formatted PDF summarizing key findings during the model training and evaluation. A great place to start!</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata.csv</span></code> [File]: Another way to view the STREAMLINE parameters used by the pipeline.  These are also organized on the first page of the PDF report.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata.pickle</span></code> [File]: A binary ‘pickle’ file of the metadata for easy loading by the 11 pipeline phases. (For more experienced users)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">algInfo.pickle</span></code> [File]: A binary ‘pickle’ file including a dictionary indicating which ML algorithms were used, along with abbreviations of names for figures/filenames, and colors to use for each algorithm in figures. (For more experienced users)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DatasetComparisons</span></code> [Folder]: Containing figures and statistical significance comparisons between the two datasets that were analyzed with STREAMLINE. (This folder only appears if more than one dataset was included in the user specified data folder, i.e. <code class="docutils literal notranslate"><span class="pre">data_path</span></code>, and phase 7 of STREAMLINE was run). Within the PDF summary, each dataset is assigned an abbreviated designation of ‘D#’ (e.g. D1, D2, etc) based on the alphabetical order of each dataset name. These designations are used in some of the files included within this folder.</p></li>
+<li><p>[Folders] - A folder for each of the two datasets analyzed (in this demo there were two: <code class="docutils literal notranslate"><span class="pre">demodata</span></code> and <code class="docutils literal notranslate"><span class="pre">hcc-data_example_no_covariates</span></code>). These folders include all results and models respective to each dataset. We summarize the contents of each folder below (feel free to skip this for now and revisit it as needed)…</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">exploratory</span></code> [Folder]: Includes all exploratory analysis summaries and figures.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CVDatasets</span></code> [Folder]: Includes all individual training and testing datasets (as .csv files) generated.</p>
+<ul>
+<li><p>Note: These are the datasets passed to modeling so if imputation and scaling was conducted, these datasets will have been partitioned, imputed, and scaled.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scale_impute</span></code> [Folder]: Includes all pickled files preserving how scaling and/or imputation was conducted based on respective training datasets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">feature_selection</span></code> [Folder]: Includes feature importance and selection summaries and figures.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">models</span></code> [Folder]: Includes the ML algorithm hyperparameters selected by Optuna for each CV partition and modeling algorithm, as well as pickled files storing all models for future use.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_evaluation</span></code> [Folder]: Includes all model evaluation results, summaries, figures, and statistical comparisons.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">applymodel</span></code> [Folder]: Includes all model evaluation results when applied to a hold out replication datasets. This includes a new PDF summary of models when applied to this further hold-out dataset.</p>
+<ul>
+<li><p>Note: In the demonstration analysis we only created and applied a replication dataset for <code class="docutils literal notranslate"><span class="pre">hcc-data_example</span></code>. Therefore, this folder only appears in output folder for <code class="docutils literal notranslate"><span class="pre">hcc-data_example</span></code>.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">runtimes.csv</span></code> [File]: Summary file giving the total runtimes spent on each phase or ML modeling algorithm in STREAMLINE.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cluster.html" class="btn btn-neutral float-left" title="Running on HPC Clusters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="phases.html" class="btn btn-neutral float-right" title="STREAMLINE Phases Described" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Ryan Urbanowicz, Harsh Bandhey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

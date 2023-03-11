@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STREAMLINE Phases Described &mdash; STREAMLINE 2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="STREAMLINE Run Parameters" href="parameters.html" />
+    <link rel="prev" title="Explaining STREAMLINE Output" href="analysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            STREAMLINE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">STREAMLINE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About (FAQs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sample.html">Sample Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colab.html">Running on Google Colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="local.html">Running on Local System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cluster.html">Running on HPC Clusters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Explaining STREAMLINE Output</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">STREAMLINE Phases Described</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">STREAMLINE Run Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Guidelines for Setting Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Adding New Modeling Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">STREAMLINE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">STREAMLINE Phases Described</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/phases.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="streamline-phases-described">
+<h1>STREAMLINE Phases Described<a class="headerlink" href="#streamline-phases-described" title="Permalink to this heading"></a></h1>
+<p>The base code for STREAMLINE (located in the <code class="docutils literal notranslate"><span class="pre">streamline</span></code> folder) is organized into a series of script phases designed to best optimize the parallelization of a given analysis.
+These loosely correspond with the pipeline schematic above. These phases are designed to be run in order.
+Phases 1-6 make up the core automated pipeline, with Phase 7 and beyond being run optionally based on user needs.</p>
+<ul class="simple">
+<li><p>Phase 1: Exploratory Analysis</p>
+<ul>
+<li><p>Conducts an initial exploratory analysis of all target datasets to be analyzed and compared</p></li>
+<li><p>Conducts basic data cleaning</p></li>
+<li><p>Conducts k-fold cross validation (CV) partitioning to generate k training and k testing datasets</p></li>
+<li><p>[Runtime]: Typically fast, with the exception of generating feature correlation heatmaps in datasets with a large number of features</p></li>
+</ul>
+</li>
+<li><p>Phase 2: Data Preprocessing</p>
+<ul>
+<li><p>Conducts feature transformations (i.e. data scaling) on all CV training datasets individually</p></li>
+<li><p>Conducts imputation of missing data values (missing data is not allowed by most scikit-learn modeling packages) on all CV training datasets individually</p></li>
+<li><p>Generates updated training and testing CV datasets</p></li>
+<li><p>[Runtime]: Typically fast, with the exception of imputing larger datasets with many missing values</p></li>
+</ul>
+</li>
+<li><p>Phase 3: Feature Importance Evaluation</p>
+<ul>
+<li><p>Conducts feature importance estimations on all CV training datasets individually</p></li>
+<li><p>Generates updated training and testing CV datasets</p></li>
+<li><p>[Runtime]: Typically reasonably fast, takes more time to run MultiSURF as the number of training instances approaches the default for ‘instance_subset’, or this parameter set higher in larger datasets</p></li>
+</ul>
+</li>
+<li><p>Phase 4: Feature Selection</p>
+<ul>
+<li><p>Applies ‘collective’ feature selection within all CV training datasets individually</p></li>
+<li><p>Features removed from a given training dataset are also removed from corresponding testing dataset</p></li>
+<li><p>Generates updated training and testing CV datasets</p></li>
+<li></li>
+</ul>
+</li>
+<li><p>Phase 5: Machine Learning Modeling</p>
+<ul>
+<li><p>Conducts hyperparameter sweep for all ML modeling algorithms individually on all CV training datasets</p></li>
+<li><p>Conducts ‘final’ modeling for all ML algorithms individually on all CV training datasets using ‘optimal’ hyperparameters found in previous step</p></li>
+<li><p>Calculates and saves all evaluation metrics for all ‘final’ models</p></li>
+<li><p>[Runtime]: Slowest phase, can be sped up by reducing the set of ML methods selected to run, or deactivating ML methods that run slowly on large datasets</p></li>
+</ul>
+</li>
+<li><p>Phase 6: Statistics Summary</p>
+<ul>
+<li><p>Combines all results to generate summary statistics files, generate results plots, and conduct non-parametric statistical significance analyses comparing ML model performance across CV runs</p></li>
+<li><p>[Runtime]: Moderately fast</p></li>
+</ul>
+</li>
+<li><p>Phase 7: [Optional] Compare Datasets</p>
+<ul>
+<li><p>NOTE: Only can be run if the STREAMLINE was run on more than dataset</p></li>
+<li><p>Conducts non-parametric statistical significance analyses comparing separate original ‘target’ datasets analyzed by pipeline</p></li>
+<li><p>[Runtime]: Fast</p></li>
+</ul>
+</li>
+<li><p>Phase 8: [Optional] Generate PDF Training Summary Report</p>
+<ul>
+<li><p>Generates a pre-formatted PDF including all pipeline run parameters, basic dataset information, and key exploratory analyses, ML modeling results, statistical comparisons, and runtime.</p></li>
+<li><p>[Runtime]: Moderately fast</p></li>
+</ul>
+</li>
+<li><p>Phase 9: [Optional] Apply Models to Replication Data</p>
+<ul>
+<li><p>Applies all previously trained models for a single ‘target’ dataset to one or more new ‘replication’ dataset(s) that has the same features from an original ‘target’ dataset</p></li>
+<li><p>Conducts exploratory analysis on new ‘replication’ dataset(s)</p></li>
+<li><p>Applies scaling, imputation, and feature selection (unique to each CV partition from model training) to new ‘replication’ dataset(s) in preparation for model application</p></li>
+<li><p>Evaluates performance of all models the prepared ‘replication’ dataset(s)</p></li>
+<li><p>Generates summary statistics files, results plots, and conducts non-parametric statistical significance analyses comparing ML model performance across replications CV data transformations</p></li>
+<li><p>NOTE: feature importance evaluation and ‘target’ dataset statistical comparisons are irrelevant to this phase</p></li>
+<li><p>[Runtime]: Moderately fast</p></li>
+</ul>
+</li>
+<li><p>Phase 10: [Optional] Generate PDF ‘Apply Replication’ Summary Report</p>
+<ul>
+<li><p>Generates a pre-formatted PDF including all pipeline run parameters, basic dataset information, and key exploratory analyses, ML modeling results, and statistics.</p></li>
+<li><p>[Runtime]: Moderately fast</p></li>
+</ul>
+</li>
+<li><p>Phase 11: [Optional] File Cleanup</p>
+<ul>
+<li><p>Deletes files that do not need to be kept following pipeline run.</p></li>
+<li><p>[Runtime]: Fast</p></li>
+</ul>
+</li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="analysis.html" class="btn btn-neutral float-left" title="Explaining STREAMLINE Output" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="parameters.html" class="btn btn-neutral float-right" title="STREAMLINE Run Parameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Ryan Urbanowicz, Harsh Bandhey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

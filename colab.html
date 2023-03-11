@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running on Google Colab &mdash; STREAMLINE 2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Running on Local System" href="local.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            STREAMLINE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">STREAMLINE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About (FAQs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sample.html">Sample Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Running on Google Colab</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-on-demo-dataset">Running on Demo Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inspecting-your-first-run">Inspecting your first run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-on-your-own-datasets">Running on your own datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="local.html">Running on Local System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cluster.html">Running on HPC Clusters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Explaining STREAMLINE Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phases.html">STREAMLINE Phases Described</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">STREAMLINE Run Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Guidelines for Setting Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Adding New Modeling Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">STREAMLINE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Running on Google Colab</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/colab.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="running-on-google-colab">
+<h1>Running on Google Colab<a class="headerlink" href="#running-on-google-colab" title="Permalink to this heading"></a></h1>
+<p>In this section we first provide <a class="reference internal" href="#setting-up-your-first-run"><span class="xref myst">instructions for users with little to no coding experience</span></a>.
+Users with some coding experience can jump to other sections
+like how to run it <a class="reference internal" href="local.html"><span class="std std-doc">locally</span></a>, on <a class="reference internal" href="#jupyter.md"><span class="xref myst">jupyter notebook</span></a> or on
+an <a class="reference internal" href="cluster.html"><span class="std std-doc">HPC Cluster</span></a>.</p>
+<p>However, all users may benefit from reviewing the <a class="reference internal" href="tips.html"><span class="std std-doc">tips</span></a> section.</p>
+<p>As STREAMLINE is currently in its ‘beta’ release, we recommend users first check that they have downloaded the
+most recent release of STREAMLINE before applying any of the run modes described below,
+as we are actively updating this software as feedback is received.</p>
+<p>This is the easiest but most limited way to run STREAMLINE. These instructions are geared towards those with little
+to no computing experience. All other users can skip to the next more advanced sections
+but may wish to revisit later parts of this section for helpful details.</p>
+<ul class="simple">
+<li><p>To learn more about Google Colaboratory prior to setup please visit the following link:
+https://research.google.com/colaboratory/</p></li>
+</ul>
+<section id="running-on-demo-dataset">
+<h2>Running on Demo Dataset<a class="headerlink" href="#running-on-demo-dataset" title="Permalink to this heading"></a></h2>
+<p>Follow the steps below to get STREAMLINE running on the <a class="reference internal" href="sample.html#demonstration-data"><span class="std std-ref">demonstration datasets</span></a>.
+In summary, they detail the process of opening the STREAMLINE Colab Notebook to your Google Drive,
+and running the notebook called <code class="docutils literal notranslate"><span class="pre">STREAMLINE-GoogleColab.ipynb</span></code> with Google Colaboratory (the link is provided below), running it
+and downloading the output files.</p>
+<ol class="arabic simple">
+<li><p>Set up a Google account (if for some reason you don’t already have one).</p>
+<ul class="simple">
+<li><p>Click here for help: https://support.google.com/accounts/answer/27441?hl=en</p></li>
+</ul>
+</li>
+<li><p>Open the following Google Colab Notebook using this link:
+<a class="reference external" href="https://colab.research.google.com/drive/17s55GajtN5WCEV-DfegtiFhvGp73Haj4?usp=sharing">https://colab.research.google.com/drive/17s55GajtN5WCEV-DfegtiFhvGp73Haj4?usp=sharing</a></p></li>
+<li><p>[Optional] At the top of the notebook open the <code class="docutils literal notranslate"><span class="pre">Runtime</span></code> menu and select <code class="docutils literal notranslate"><span class="pre">Disconnect</span> <span class="pre">and</span> <span class="pre">delete</span> <span class="pre">runtime</span></code>. This clears the memory of the previous notebook run. This is only necessary when the underlying base code is modified, but it may be useful to troubleshoot if modifications to the notebook do not seem to have an effect.</p></li>
+<li><p>At the top of the notebook open the <code class="docutils literal notranslate"><span class="pre">Runtime</span></code> menu and select <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">all</span></code>.  This directs the notebook to run all code cells of the notebook, i.e. all phases of STREAMLINE.  Here we have preconfigured STREAMLINE to automatically run on two <a class="reference internal" href="sample.html#demonstration-data"><span class="std std-ref">demonstration datasets</span></a> found in the <code class="docutils literal notranslate"><span class="pre">DemoData</span></code> folder.</p></li>
+<li><p>Note: At this point the notebook will do the following automatically:</p>
+<ol class="arabic simple">
+<li><p>Reserve a limited amount of free memory (RAM) and disk space on Google Cloud.</p>
+<ul class="simple">
+<li><p>Note: it is also possible to set up this Notebook to run using the resources of your local PC (not covered here).</p></li>
+</ul>
+</li>
+<li><p>Load the individual STREAMLINE run files into memory from the STREAMLINE Github.</p></li>
+<li><p>Install all other necessary python packages on the Google Colaboratory Environment.</p></li>
+<li><p>Run the entirety of STREAMLINE on the <a class="reference internal" href="sample.html#demonstration-data"><span class="std std-ref">demonstration datasets</span></a> folder (i.e. <code class="docutils literal notranslate"><span class="pre">DemoData</span></code>).</p>
+<ul class="simple">
+<li><p>Note: all 5 steps should take approximately 3-5 minutes to run.</p></li>
+</ul>
+</li>
+<li><p>Download the Main Report and the replication report automatically.</p></li>
+<li><p>If you have the last cell uncommented (by default) it will also download the complete experiment folder as zip file on your local computer.</p></li>
+</ol>
+</li>
+</ol>
+</section>
+<section id="inspecting-your-first-run">
+<h2>Inspecting your first run<a class="headerlink" href="#inspecting-your-first-run" title="Permalink to this heading"></a></h2>
+<p>During or after the notebook runs, users can inspect the individual code and text (i.e. markdown) ce
+lls of the notebook. Individual cells can be collapsed or expanded by clicking on the small arrowhead
+on the left side of each cell. The first set of cells set up the coding environment automatically.
+Later cells are used to set the pipeline run parameters and then run the 11 phases of the pipeline in sequence.</p>
+<p>Some cells will display output figures generated by STREAMLINE.
+For example, scroll down to ‘Phase 6: Statistics’ and open the cell below the text ‘Run Statistics
+Summary and Figure Generation’. Scrolling down this cell will first reveal the run commands calling
+relevant STREAMLINE code, then the figures generated by this phase. Note that to save runtime,
+this demonstration run is only applying three ML modeling algorithms: Naive Bayes, Logistic Regression,
+and Decision Trees.  These are typically the three fastest algorithms available in STREAMLINE.</p>
+<p>The Colab notebook automatically downloads the General and Replication Report,
+in addition to the complete experiment folder.</p>
+<p>The user open the zip on their local system, or alternatively you can explore the files on Google Colab
+by opening the file-explorer pane on the left.</p>
+<p>How to analyze this output can be found in the <a class="reference internal" href="analysis.html"><span class="std std-doc">Analyzing Outputs</span></a> section.</p>
+</section>
+<section id="running-on-your-own-datasets">
+<h2>Running on your own datasets<a class="headerlink" href="#running-on-your-own-datasets" title="Permalink to this heading"></a></h2>
+<p>This section explains how to update the Google Colaboratory Notebook to run on one or more user specified
+datasets rather than the <a class="reference internal" href="sample.html#demonstration-data"><span class="std std-ref">demonstration datasets</span></a>. This instructions are
+effectively the same for running STREAMLINE from Jupyter Notebook. Note that, for brevity,
+the parameter names given below are slightly different from the argument identifiers when using STREAMLINE
+from the command-line (a guide for commandline parameters is given <a class="reference internal" href="parameters.html"><span class="std std-doc">here</span></a>).</p>
+<ol class="arabic simple">
+<li><p>Open the same notebook as the above section for DemoData</p></li>
+<li><p>Uncomment cell of code which says “Uncomment to load custom dataset”</p></li>
+<li><p>Upload files as and input <code class="docutils literal notranslate"><span class="pre">class_label</span></code>, <code class="docutils literal notranslate"><span class="pre">instance_label</span></code> and <code class="docutils literal notranslate"><span class="pre">match_label</span></code> asked with these requirements:</p>
+<ul class="simple">
+<li><p>Files are in comma-separated format with extension ‘.txt’ or ‘.csv’ format.</p></li>
+<li><p>Missing data values should be empty or indicated with an ‘NA’.</p></li>
+<li><p>Dataset(s) include a header giving column labels.</p></li>
+<li><p>Data columns should only include features (i.e. independant variables), a class label, and [optionally] instance (i.e. row) labels, and/or match labels (if matched cross validation will be used).</p></li>
+<li><p>Binary class values are encoded as 0 (e.g. negative), and 1 (positive) with respect to true positive, true negative, false positive, false negative metrics. PRC plots focus on classification of ‘positives’.</p></li>
+<li><p>All feature values (both categorical and quantitative) are numerically encoded (i.e. no letters or words). Scikit-learn does not accept text-based values.</p>
+<ul>
+<li><p>However, both <code class="docutils literal notranslate"><span class="pre">instance_label</span></code> and <code class="docutils literal notranslate"><span class="pre">match_label</span></code> values may be either numeric or text.</p></li>
+</ul>
+</li>
+<li><p>If multiple datasets are being analyzed they must each have the same <code class="docutils literal notranslate"><span class="pre">class_label</span></code> (e.g. ‘Class’), and (if present), the same <code class="docutils literal notranslate"><span class="pre">instance_label</span></code> (e.g. ‘ID’) and <code class="docutils literal notranslate"><span class="pre">match_label</span></code> (e.g. ‘Match_ID’).</p></li>
+</ul>
+</li>
+<li><p>Update the first 6 pipeline run parameters as such:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">demo_run</span></code>: Change from True to False (Note, this parameter is only used by the notebooks for the demonstration analysis, and is one of the few parameters that use a Boolean rather than string value).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data_path</span></code>: Change the end of the path from DemoData to the name of your new dataset folder (e.g. “/content/drive/MyDrive/STREAMLINE-main/my_data”).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_path</span></code>: This can be left ‘as-is’ or modified to some other folder on your google drive within which to store all STREAMLINE experiments.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">experiment_name</span></code>: Change this to some new unique experiment name (do this each time you want to run a new experiment, either on the same or different dataset(s)), e.g. ‘my_first_experiment’.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">class_label</span></code>: Change to the column header indicating the class label in each dataset, e.g. ‘Class’.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">instance_label</span></code>: Change to the column header indicating unique instance ID’s for each row in the dataset(s), or change to the string ‘None’ if your dataset does not include instance IDs.</p></li>
+</ul>
+</li>
+<li><p>Specifying replication data run parameters:</p>
+<ul class="simple">
+<li><p>Scroll down to the code block with the text ‘Run Parameters for Phase 10’.</p></li>
+<li><p>If you don’t have a replication dataset simply change <code class="docutils literal notranslate"><span class="pre">applyToReplication</span></code> to False (boolean value) and ignore the other two run parameters in this code block.</p></li>
+</ul>
+</li>
+<li><p>[Optional] Update other STREAMLINE run parameters to suit your analysis needs within code blocks 6-14. We will cover some common run parameters to consider here:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cv_partitions</span></code>: The number of CV training/testing partitions created, and consequently the number of models trained for each ML algorithm. We recommend setting this between 3-10. A larger value will take longer to run but produce more accurate results.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">categorical_cutoff</span></code>: STREAMLINE uses this parameter to automatically determine which features to treat as categorical vs. numeric. If a feature has more than this many unique values, it is considered to be numeric.</p>
+<ul>
+<li><p>Note: Currently, STREAMLINE does NOT automatically apply one-hot-encoding to categorical features meaning that all features will still be treated as numerical during ML modeling. Its currently up to the users decide whether to pre-encode features.  However STREAMLINE does take feature type into account during both the exploratory analysis, data preprocessing, and feature importance phases.</p></li>
+<li><p>Note: Users can also manually specify which features to treat as categorical or even to point to features in the dataset that should be ignored in the analysis with the parameters <code class="docutils literal notranslate"><span class="pre">ignore_features_path</span></code> and <code class="docutils literal notranslate"><span class="pre">categorical_feature_path</span></code>, respectively. For either, instead of the default string ‘None’ setting the user specifies the path to a .csv file including a row of feature names from the dataset that should either be treated as categorical or ignored, respectively.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">algorithms</span></code>: A list of modeling algorithms to run, setting it to None will run all the algorithms. Must be from the set of the full or abbreviated name of models found in <code class="docutils literal notranslate"><span class="pre">streamline/models</span></code> folder.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exlude</span></code>: A list of modeling algorithms to exclude from the pipeline. Must be from the set of the full or abbreviated name of models found in <code class="docutils literal notranslate"><span class="pre">streamline/models</span></code> folder.</p></li>
+<li><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_trials</span></code>: Set to a higher value to give Optuna more attempts to optimize hyperparameter settings.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">timeout</span></code>: Set higher to increase the maximum time allowed for Optuna to run the specified <code class="docutils literal notranslate"><span class="pre">n_trials</span></code> (useful for algorithms that take more time to run)</p></li>
+</ul>
+</li>
+</ol>
+<ul class="simple">
+<li><p>Note: There are a number of other run parameter options, and we encourage users to read descriptions of each to see what other options are available.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="install.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="local.html" class="btn btn-neutral float-right" title="Running on Local System" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Ryan Urbanowicz, Harsh Bandhey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

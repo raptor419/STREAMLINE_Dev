@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running on Local System &mdash; STREAMLINE 2 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Running on HPC Clusters" href="cluster.html" />
+    <link rel="prev" title="Running on Google Colab" href="colab.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            STREAMLINE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">STREAMLINE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About (FAQs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sample.html">Sample Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colab.html">Running on Google Colab</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Running on Local System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-on-jupyter-notebook">Running on Jupyter Notebook</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#running-on-demo-dataset">Running on Demo Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-on-your-own-datasets">Running on Your Own Datasets</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running-on-command-line-interface">Running on command line interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-config-file">Using config file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-command-line-parameters">Using command-line parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cluster.html">Running on HPC Clusters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Explaining STREAMLINE Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phases.html">STREAMLINE Phases Described</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">STREAMLINE Run Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tips.html">Guidelines for Setting Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Adding New Modeling Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citation.html">Citations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">STREAMLINE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Running on Local System</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/local.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="running-on-local-system">
+<h1>Running on Local System<a class="headerlink" href="#running-on-local-system" title="Permalink to this heading"></a></h1>
+<p>This section describes the steps to run STREAMLINE Locally on your system.</p>
+<p>If you haven’t installed the STREAMLINE already goto the <a class="reference internal" href="install.html#local-installation"><span class="std std-ref">installation</span></a> section.
+To run STREAMLINE locally make sure you’ve done the local installation as per the <a class="reference internal" href="install.html"><span class="std std-doc">guide</span></a></p>
+<p>As a gist run the following commands or be in the root STREAMLINE folder to run STREAMLINE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="o">-</span><span class="n">b</span> <span class="n">dev</span> <span class="o">--</span><span class="n">single</span><span class="o">-</span><span class="n">branch</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">UrbsLab</span><span class="o">/</span><span class="n">STREAMLINE</span>
+<span class="n">cd</span> <span class="n">STREAMLINE</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<section id="running-on-jupyter-notebook">
+<h2>Running on Jupyter Notebook<a class="headerlink" href="#running-on-jupyter-notebook" title="Permalink to this heading"></a></h2>
+<section id="running-on-demo-dataset">
+<h3>Running on Demo Dataset<a class="headerlink" href="#running-on-demo-dataset" title="Permalink to this heading"></a></h3>
+<p>Here we detail how to run STREAMLINE within the provided Jupyter Notebook named <code class="docutils literal notranslate"><span class="pre">STREAMLINE-Notebook.ipypnb</span></code>.
+This included notebook is set up to run on the included <a class="reference internal" href="sample.html#demonstration-data"><span class="std std-ref">demonstration datasets</span></a>.</p>
+<ol class="arabic simple">
+<li><p>First, ensure all local installation is done as per the <a class="reference internal" href="install.html#jupyter-notebook"><span class="std std-ref">guide</span></a> in your environment
+and dataset assumptions are satisfied.</p></li>
+<li><p>Open Jupyter Notebook (info about Jupyter Notebooks here, https://jupyter.readthedocs.io/en/latest/running.html) by
+going to the STREAMLINE Root folder, typing <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code> and then opening the <code class="docutils literal notranslate"><span class="pre">STREAMLINE-Notebook.ipypnb</span></code> that
+shows up in the new page open on your web browser.</p></li>
+<li><p>Scroll down to the second code block of the notebook below the header ‘Mandatory Parameters to Update’ and update the following run parameters to reflect paths on your PC.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data_path</span></code>: Change the path, so it reflects the location of the <code class="docutils literal notranslate"><span class="pre">DemoData</span></code> folder (within the STREAMLINE folder) on your PC, e.g. <code class="docutils literal notranslate"><span class="pre">C:/Users/ryanu/Documents/GitHub/STREAMLINE/DemoData</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_path</span></code>: Change the path to specify the desired location for the STREAMLINE output experiment folder.</p></li>
+</ul>
+</li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Kernel</span></code> on the Jupyter notebook GUI, and select <code class="docutils literal notranslate"><span class="pre">Restart</span> <span class="pre">&amp;</span> <span class="pre">Run</span> <span class="pre">All</span></code> to run the script.</p></li>
+<li><p>Running the included <a class="reference internal" href="sample.html#demonstration-data"><span class="std std-ref">demonstration datasets</span></a> with the pre-specified notebook run parameters,
+should only take a 3-5 minutes depending on your PC hardware.</p>
+<ul class="simple">
+<li><p>Note: It may take several hours or more to run this notebook in other contexts. Parameters that impact runtimes are discussed in <a class="reference internal" href="tips.html#reducing-runtime"><span class="std std-ref">this section</span></a> above. We recommend users with larger analyses to use a computing cluster if possible.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="running-on-your-own-datasets">
+<h3>Running on Your Own Datasets<a class="headerlink" href="#running-on-your-own-datasets" title="Permalink to this heading"></a></h3>
+<p>Move your custom dataset to the STREAMLINE root directory,
+follow the same steps as in the <a class="reference internal" href="colab.html#running-on-your-own-datasets-tbd"><span class="std std-ref">Colab Notebook</span></a></p>
+</section>
+</section>
+<section id="running-on-command-line-interface">
+<h2>Running on command line interface<a class="headerlink" href="#running-on-command-line-interface" title="Permalink to this heading"></a></h2>
+<p>The most efficient way of running STREAMLINE is through command line.
+There’s two ways to run STREAMLINE thorough a CLI interface.</p>
+<ol class="arabic simple">
+<li><p>Through picking up run parameters through a config file.</p></li>
+<li><p>Through manually inputting run parameters</p></li>
+</ol>
+<p>There is a runner file called run.py which runs the whole or part of STREAMLINE
+pipeline as defined. A few examples are given below.</p>
+<section id="using-config-file">
+<h3>Using config file<a class="headerlink" href="#using-config-file" title="Permalink to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">run.py</span></code> can also be used with config parameters
+as defined in the <a class="reference internal" href="parameters.html"><span class="std std-doc">parameters section</span></a></p>
+<p>Then it can be run with the command defined below.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">config_file</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>For running the Demo Dataset locally a config file is already provided and
+the user doesn’t need to do any edits.</p>
+<p>The example config setup to run all steps till report generations locally on the Demo Dataset
+is given in the config
+file <a class="reference external" href="https://github.com/UrbsLab/STREAMLINE/blob/dev/run.cfg">here</a></p>
+<p>The user can simply run the following command to run the whole pipeline:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">c</span> <span class="n">local</span><span class="o">.</span><span class="n">cfg</span>
+</pre></div>
+</div>
+<p>Specifically the <code class="docutils literal notranslate"><span class="pre">run_cluster</span></code> parameter in the <code class="docutils literal notranslate"><span class="pre">multiprocessing</span></code> section has to been defined as
+<code class="docutils literal notranslate"><span class="pre">run_cluster</span> <span class="pre">=</span> <span class="pre">&quot;False&quot;</span></code> which runs it locally. This specific parameter in
+the file is located <a class="reference external" href="https://github.com/UrbsLab/STREAMLINE/blob/5c66b3286056bbd9b514c202aa0a22758a76f62c/run.cfg#L11">here</a></p>
+</section>
+<section id="using-command-line-parameters">
+<h3>Using command-line parameters<a class="headerlink" href="#using-command-line-parameters" title="Permalink to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">run.py</span></code> can also be used with command line parameters
+as defined in the <a class="reference internal" href="parameters.html"><span class="std std-doc">parameters section</span></a></p>
+<p>Similarly, the following additional parameters need to be given</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">other</span> <span class="n">commands</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span><span class="o">&lt;</span><span class="ow">or</span> <span class="n">Flase</span><span class="p">,</span> <span class="n">accordingly</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>As example case to all phases till report generation is given below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">path</span> <span class="n">DemoData</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">till</span><span class="o">-</span><span class="n">report</span> <span class="o">--</span><span class="n">class</span><span class="o">-</span><span class="n">label</span> <span class="n">Class</span> <span class="o">--</span><span class="n">inst</span><span class="o">-</span><span class="n">label</span> <span class="n">InstanceID</span> <span class="o">--</span><span class="n">algorithms</span><span class="o">=</span><span class="n">NB</span><span class="p">,</span><span class="n">LR</span><span class="p">,</span><span class="n">DT</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>A user can also run phases of STREAMLINE individually,
+however the user must have run all the phases before the phase he wants to run, i.e. the user must run this
+pipeline sequentially in the given order.</p>
+<p>To just run Exploratory Phase (Phase 1):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">data</span><span class="o">-</span><span class="n">path</span> <span class="n">DemoData</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">eda</span> <span class="o">--</span><span class="n">class</span><span class="o">-</span><span class="n">label</span> <span class="n">Class</span> <span class="o">--</span><span class="n">inst</span><span class="o">-</span><span class="n">label</span> <span class="n">InstanceID</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>To just run Data Preparation Phase (Phase 2):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">dataprep</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>To just run Feature Importance Phase (Phase 3):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">feat</span><span class="o">-</span><span class="n">imp</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>To just run Feature Selection Phase (Phase 4):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">feat</span><span class="o">-</span><span class="n">sel</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>To just run Modeling Phase (Phase 5):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">model</span> <span class="o">--</span><span class="n">algorithms</span> <span class="n">NB</span><span class="p">,</span><span class="n">LR</span><span class="p">,</span><span class="n">DT</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>To just run Statistical Analysis Phase (Phase 6):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">stats</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>To just run Dataset Compare Phase (Phase 7):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">class</span><span class="o">-</span><span class="n">label</span> <span class="n">Class</span> <span class="o">--</span><span class="n">inst</span><span class="o">-</span><span class="n">label</span> <span class="n">InstanceID</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">till</span><span class="o">-</span><span class="n">report</span> <span class="kc">False</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">compare</span><span class="o">-</span><span class="n">dataset</span> <span class="kc">True</span> <span class="o">--</span><span class="n">algorithms</span> <span class="n">NB</span><span class="p">,</span><span class="n">LR</span><span class="p">,</span><span class="n">DT</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="nb">all</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>To just run (Reporting Phase) Phase 8:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">class</span><span class="o">-</span><span class="n">label</span> <span class="n">Class</span> <span class="o">--</span><span class="n">inst</span><span class="o">-</span><span class="n">label</span> <span class="n">InstanceID</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">till</span><span class="o">-</span><span class="n">report</span> <span class="kc">False</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">report</span> <span class="kc">True</span> <span class="o">--</span><span class="n">algorithms</span> <span class="n">NB</span><span class="p">,</span><span class="n">LR</span><span class="p">,</span><span class="n">DT</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="nb">all</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>To just run Replication Phase (Phase 9):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">rep</span><span class="o">-</span><span class="n">path</span> <span class="n">DemoRepData</span> <span class="o">--</span><span class="n">dataset</span> <span class="n">DemoData</span><span class="o">/</span><span class="n">demodata</span><span class="o">.</span><span class="n">csv</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">replicate</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>To just run Replication Report Phase (Phase 10):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">rep</span><span class="o">-</span><span class="n">path</span> <span class="n">DemoRepData</span> <span class="o">--</span><span class="n">dataset</span> <span class="n">DemoData</span><span class="o">/</span><span class="n">demodata</span><span class="o">.</span><span class="n">csv</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">rep</span><span class="o">-</span><span class="n">report</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>To just run Cleaning Phase (Phase 11):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">out</span><span class="o">-</span><span class="n">path</span> <span class="n">demo</span> <span class="o">--</span><span class="n">exp</span><span class="o">-</span><span class="n">name</span> <span class="n">demo</span> <span class="o">--</span><span class="n">do</span><span class="o">-</span><span class="n">clean</span> <span class="o">--</span><span class="k">del</span><span class="o">-</span><span class="n">time</span> <span class="o">--</span><span class="k">del</span><span class="o">-</span><span class="n">old</span><span class="o">-</span><span class="n">cv</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">cluster</span> <span class="kc">False</span> <span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">parallel</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="colab.html" class="btn btn-neutral float-left" title="Running on Google Colab" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cluster.html" class="btn btn-neutral float-right" title="Running on HPC Clusters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Ryan Urbanowicz, Harsh Bandhey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>streamline.runners.dataprocess_runner &mdash; STREAMLINE 2 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="../../../about.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            STREAMLINE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">STREAMLINE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">About (FAQs)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sample.html">Sample Outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../colab.html">Running on Google Colab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../local.html">Running on Local System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cluster.html">Running on HPC Clusters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../analysis.html">Explaining STREAMLINE Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../phases.html">STREAMLINE Phases Described</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../parameters.html">STREAMLINE Run Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tips.html">Guidelines for Setting Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Development notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Adding New Modeling Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../citation.html">Citations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">STREAMLINE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">streamline.runners.dataprocess_runner</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for streamline.runners.dataprocess_runner</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">dask</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">from</span> <span class="nn">streamline.dataprep.data_process</span> <span class="kn">import</span> <span class="n">DataProcessing</span>
+<span class="kn">from</span> <span class="nn">streamline.utils.runners</span> <span class="kn">import</span> <span class="n">runner_fn</span><span class="p">,</span> <span class="n">num_cores</span>
+<span class="kn">from</span> <span class="nn">streamline.utils.cluster</span> <span class="kn">import</span> <span class="n">get_cluster</span>
+
+
+<div class="viewcode-block" id="DataProcessRunner"><a class="viewcode-back" href="../../../codedocs/streamline.runners.dataprocess_runner.html#streamline.runners.dataprocess_runner.DataProcessRunner">[docs]</a><span class="k">class</span> <span class="nc">DataProcessRunner</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Runner class for Data Processing Jobs of CV Splits</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">experiment_name</span><span class="p">,</span> <span class="n">scale_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">impute_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">multi_impute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite_cv</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">class_label</span><span class="o">=</span><span class="s2">&quot;Class&quot;</span><span class="p">,</span> <span class="n">instance_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">run_cluster</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">queue</span><span class="o">=</span><span class="s1">&#39;defq&#39;</span><span class="p">,</span> <span class="n">reserved_memory</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            output_path:</span>
+<span class="sd">            experiment_name:</span>
+<span class="sd">            scale_data:</span>
+<span class="sd">            impute_data:</span>
+<span class="sd">            multi_impute:</span>
+<span class="sd">            overwrite_cv:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">=</span> <span class="n">output_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">=</span> <span class="n">experiment_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_data</span> <span class="o">=</span> <span class="n">scale_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">impute_data</span> <span class="o">=</span> <span class="n">impute_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multi_impute</span> <span class="o">=</span> <span class="n">multi_impute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">overwrite_cv</span> <span class="o">=</span> <span class="n">overwrite_cv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">class_label</span> <span class="o">=</span> <span class="n">class_label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instance_label</span> <span class="o">=</span> <span class="n">instance_label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_cluster</span> <span class="o">=</span> <span class="n">run_cluster</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">queue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reserved_memory</span> <span class="o">=</span> <span class="n">reserved_memory</span>
+
+        <span class="c1"># Argument checks-------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Output path must exist (from phase 1) before phase 2 can begin&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Experiment must exist (from phase 1) before phase 2 can begin&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_metadata</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DataProcessRunner.run"><a class="viewcode-back" href="../../../codedocs/streamline.runners.dataprocess_runner.html#streamline.runners.dataprocess_runner.DataProcessRunner.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">job_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">job_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">dataset_paths</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">)</span>
+        <span class="n">remove_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;metadata.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;metadata.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;algInfo.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;jobsCompleted&#39;</span><span class="p">,</span> <span class="s1">&#39;dask_logs&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;logs&#39;</span><span class="p">,</span> <span class="s1">&#39;jobs&#39;</span><span class="p">,</span> <span class="s1">&#39;DatasetComparisons&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">remove_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">dataset_paths</span><span class="p">:</span>
+                <span class="n">dataset_paths</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">dataset_directory_path</span> <span class="ow">in</span> <span class="n">dataset_paths</span><span class="p">:</span>
+            <span class="n">full_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">dataset_directory_path</span>
+
+            <span class="c1"># Create folder to store scaling and imputing files</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">full_path</span> <span class="o">+</span> <span class="s1">&#39;/scale_impute/&#39;</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">full_path</span> <span class="o">+</span> <span class="s1">&#39;/scale_impute/&#39;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">cv_train_path</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">full_path</span> <span class="o">+</span> <span class="s2">&quot;/CVDatasets/*Train.csv&quot;</span><span class="p">):</span>
+                <span class="n">job_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">cv_test_path</span> <span class="o">=</span> <span class="n">cv_train_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Train.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;Test.csv&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_cluster</span> <span class="o">==</span> <span class="s2">&quot;SLURMOld&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">submit_slurm_cluster_job</span><span class="p">(</span><span class="n">cv_train_path</span><span class="p">,</span> <span class="n">cv_test_path</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_cluster</span> <span class="o">==</span> <span class="s2">&quot;LSFOld&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">submit_lsf_cluster_job</span><span class="p">(</span><span class="n">cv_train_path</span><span class="p">,</span> <span class="n">cv_test_path</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">run_parallel</span> <span class="ow">and</span> <span class="n">run_parallel</span> <span class="o">!=</span> <span class="s2">&quot;False&quot;</span><span class="p">:</span>
+                    <span class="n">job_obj</span> <span class="o">=</span> <span class="n">DataProcessing</span><span class="p">(</span><span class="n">cv_train_path</span><span class="p">,</span> <span class="n">cv_test_path</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">scale_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">impute_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_impute</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">overwrite_cv</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">class_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+                    <span class="c1"># p = multiprocessing.Process(target=runner_fn, args=(job_obj, ))</span>
+                    <span class="n">job_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">job_obj</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">job_obj</span> <span class="o">=</span> <span class="n">DataProcessing</span><span class="p">(</span><span class="n">cv_train_path</span><span class="p">,</span> <span class="n">cv_test_path</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">scale_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">impute_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_impute</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">overwrite_cv</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">class_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+                    <span class="n">job_obj</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">run_parallel</span> <span class="ow">and</span> <span class="n">run_parallel</span> <span class="o">!=</span> <span class="s2">&quot;False&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_cluster</span><span class="p">:</span>
+            <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">num_cores</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">runner_fn</span><span class="p">)(</span><span class="n">job_obj</span><span class="p">)</span> <span class="k">for</span> <span class="n">job_obj</span> <span class="ow">in</span> <span class="n">job_list</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_cluster</span> <span class="ow">and</span> <span class="s2">&quot;Old&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_cluster</span><span class="p">:</span>
+            <span class="n">get_cluster</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_cluster</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reserved_memory</span><span class="p">)</span>
+            <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">([</span><span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">runner_fn</span><span class="p">)(</span><span class="n">job_obj</span><span class="p">)</span> <span class="k">for</span> <span class="n">job_obj</span> <span class="ow">in</span> <span class="n">job_list</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="DataProcessRunner.save_metadata"><a class="viewcode-back" href="../../../codedocs/streamline.runners.dataprocess_runner.html#streamline.runners.dataprocess_runner.DataProcessRunner.save_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">save_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="s2">&quot;metadata.pickle&quot;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;Use Data Scaling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_data</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;Use Data Imputation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">impute_data</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;Use Multivariate Imputation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_impute</span>
+        <span class="c1"># Pickle the metadata for future use</span>
+        <span class="n">pickle_out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="s2">&quot;metadata.pickle&quot;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span> <span class="n">pickle_out</span><span class="p">)</span>
+        <span class="n">pickle_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DataProcessRunner.get_cluster_params"><a class="viewcode-back" href="../../../codedocs/streamline.runners.dataprocess_runner.html#streamline.runners.dataprocess_runner.DataProcessRunner.get_cluster_params">[docs]</a>    <span class="k">def</span> <span class="nf">get_cluster_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cv_train_path</span><span class="p">,</span> <span class="n">cv_test_path</span><span class="p">):</span>
+        <span class="n">cluster_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">cv_train_path</span><span class="p">,</span> <span class="n">cv_test_path</span><span class="p">,</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span><span class="p">,</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">scale_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">impute_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">multi_impute</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">overwrite_cv</span><span class="p">,</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">class_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">]</span>
+        <span class="n">cluster_params</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cluster_params</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">cluster_params</span></div>
+
+<div class="viewcode-block" id="DataProcessRunner.submit_slurm_cluster_job"><a class="viewcode-back" href="../../../codedocs/streamline.runners.dataprocess_runner.html#streamline.runners.dataprocess_runner.DataProcessRunner.submit_slurm_cluster_job">[docs]</a>    <span class="k">def</span> <span class="nf">submit_slurm_cluster_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cv_train_path</span><span class="p">,</span> <span class="n">cv_test_path</span><span class="p">):</span>
+        <span class="n">job_ref</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        <span class="n">job_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">+</span> <span class="s1">&#39;/jobs/P1_&#39;</span> <span class="o">+</span> <span class="n">job_ref</span> <span class="o">+</span> <span class="s1">&#39;_run.sh&#39;</span>
+        <span class="n">sh_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">job_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;#!/bin/bash</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;#SBATCH -p &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;#SBATCH --job-name=&#39;</span> <span class="o">+</span> <span class="n">job_ref</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;#SBATCH --mem=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reserved_memory</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;G&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="c1"># sh_file.write(&#39;#BSUB -M &#39;+str(maximum_memory)+&#39;GB&#39;+&#39;\n&#39;)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s1">&#39;#SBATCH -o &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">+</span>
+            <span class="s1">&#39;/logs/P1_&#39;</span> <span class="o">+</span> <span class="n">job_ref</span> <span class="o">+</span> <span class="s1">&#39;.o</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s1">&#39;#SBATCH -e &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">+</span>
+            <span class="s1">&#39;/logs/P1_&#39;</span> <span class="o">+</span> <span class="n">job_ref</span> <span class="o">+</span> <span class="s1">&#39;.e</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/streamline/legacy&quot;</span> <span class="o">+</span> <span class="s1">&#39;/DataJobSubmit.py&#39;</span>
+        <span class="n">cluster_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cluster_params</span><span class="p">(</span><span class="n">cv_train_path</span><span class="p">,</span> <span class="n">cv_test_path</span><span class="p">)</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;srun&#39;</span><span class="p">,</span> <span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">]</span> <span class="o">+</span> <span class="n">cluster_params</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">command</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;sbatch &#39;</span> <span class="o">+</span> <span class="n">job_name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataProcessRunner.submit_lsf_cluster_job"><a class="viewcode-back" href="../../../codedocs/streamline.runners.dataprocess_runner.html#streamline.runners.dataprocess_runner.DataProcessRunner.submit_lsf_cluster_job">[docs]</a>    <span class="k">def</span> <span class="nf">submit_lsf_cluster_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cv_train_path</span><span class="p">,</span> <span class="n">cv_test_path</span><span class="p">):</span>
+        <span class="n">job_ref</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        <span class="n">job_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">+</span> <span class="s1">&#39;/jobs/P2_&#39;</span> <span class="o">+</span> <span class="n">job_ref</span> <span class="o">+</span> <span class="s1">&#39;_run.sh&#39;</span>
+        <span class="n">sh_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">job_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;#!/bin/bash</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;#BSUB -q &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;#BSUB -J &#39;</span> <span class="o">+</span> <span class="n">job_ref</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;#BSUB -R &quot;rusage[mem=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reserved_memory</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;G]&quot;&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;#BSUB -M &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reserved_memory</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;GB&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s1">&#39;#BSUB -o &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">+</span>
+            <span class="s1">&#39;/logs/P2_&#39;</span> <span class="o">+</span> <span class="n">job_ref</span> <span class="o">+</span> <span class="s1">&#39;.o</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s1">&#39;#BSUB -e &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiment_name</span> <span class="o">+</span>
+            <span class="s1">&#39;/logs/P2_&#39;</span> <span class="o">+</span> <span class="n">job_ref</span> <span class="o">+</span> <span class="s1">&#39;.e</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/streamline/legacy&quot;</span> <span class="o">+</span> <span class="s1">&#39;/DataJobSubmit.py&#39;</span>
+        <span class="n">cluster_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cluster_params</span><span class="p">(</span><span class="n">cv_train_path</span><span class="p">,</span> <span class="n">cv_test_path</span><span class="p">)</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">]</span> <span class="o">+</span> <span class="n">cluster_params</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">command</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">sh_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;bsub &lt; &#39;</span> <span class="o">+</span> <span class="n">job_name</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Ryan Urbanowicz, Harsh Bandhey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
